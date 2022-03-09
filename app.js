@@ -1,3 +1,10 @@
+const display = document.getElementById('display')
+const numbers = document.querySelectorAll('.number')
+const operator = document.querySelectorAll('.operator')
+const clearBtn = document.querySelector('.clear')
+
+numbers.addEventListener('click', )
+
 function add(num1, num2) {
     return num1 + num2;
 }

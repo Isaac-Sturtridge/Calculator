@@ -27,13 +27,3 @@ button {
     padding: 5px;
     gap: 5px;
 }
-
-#zero {
-    width: 15%;
-    margin: 0 3px 0 0;
-}
-
-#divide {
-    width: 15%;
-    margin: 0 0 0 3px;
-}
