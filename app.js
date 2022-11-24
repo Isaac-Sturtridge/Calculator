@@ -6,13 +6,15 @@ const sqrt = document.querySelector('.sqrt')
 const pi = document.querySelector('.pi')
 const clearBtn = document.querySelector('.clear')
 const equalBtn = document.querySelector('.equals')
+const point = document.querySelector('.point')
+let decimalPointOK = true;
 let enteringNumbers = false;
 let opOn = false;
 let multipleCalculations = false;
 
 // a running total of numbers in the current calculation
 let numbersInCalc = [];
-let operatorInCalc = '';
+let operatorsInCalc = [];
 
 numbers.forEach((num) => {
     num.addEventListener('click', function(num) {
@@ -32,39 +34,51 @@ numbers.forEach((num) => {
 
 operators.forEach((operator) => {
     operator.addEventListener('click', function(operator) {
-        if(!opOn && display.innerHTML.length < 18) {
-            numbersInCalc.push(parseInt(display.innerHTML))
-            operatorInCalc = operator.target.textContent;
-            enteringNumbers = false;
-            opOn = true;
-        } 
-        // currently it gets the second operator pressed, not the first
-        if(numbersInCalc.length == 2 && operatorInCalc != '' ) {
+        numbersInCalc.push(parseInt(display.innerHTML))
+        // for evaluating without equal button
+        if(numbersInCalc.length == 2 && operatorsInCalc.length == 1) {
             equalBtnBehaviour()
             numbersInCalc.push(parseInt(display.innerHTML))
-            operatorInCalc = operator.target.textContent;
+            operatorsInCalc.push(operator.target.textContent);
+            display.innerHTML = numbersInCalc[0]
             enteringNumbers = false;
             opOn = true;
         }
+        if(!opOn && display.innerHTML.length < 18) {
+            operatorsInCalc.push(operator.target.textContent);
+            enteringNumbers = false;
+            decimalPointOK = true;
+            opOn = true;
+        } 
+        
         
     })
 })
 
 squared.addEventListener('click', function() {
     display.innerHTML = Math.pow(parseFloat(display.innerHTML), 2)
+    enteringNumbers = false
 })
 
 sqrt.addEventListener('click', function() {
     display.innerHTML = Math.sqrt(parseFloat(display.innerHTML))
+    enteringNumbers = false
 })
 
 pi.addEventListener('click', function() {
     display.innerHTML = Math.PI()
 })
 
+point.addEventListener('click', function() {
+    if(enteringNumbers && decimalPointOK) {
+        display.innerHTML = display.innerHTML + '.'
+        decimalPointOK = false;
+    }
+})
+
 function operatorBehaviour(operator) {
     numbersInCalc.push(parseInt(display.innerHTML))
-    operatorInCalc = operator.target.textContent;
+    operatorsInCalc = operator.target.textContent;
     enteringNumbers = false;
     opOn = true;
 }
@@ -79,7 +93,7 @@ clearBtn.addEventListener('click', () => {
 // sort out equal button behaviour, it should act differently depending on button pressed, psasing a button doesn't work for now
 function equalBtnBehaviour() {
     numbersInCalc.push(parseInt(display.innerHTML))
-    switch(operatorInCalc) {
+    switch(operatorsInCalc[0]) {
         case '+':
             display.innerHTML = operate(add, numbersInCalc[0], numbersInCalc[1]);
         break;
@@ -99,13 +113,14 @@ function equalBtnBehaviour() {
         break;
     }
     enteringNumbers = false;
-    numbersInCalc = [], operatorInCalc = '';
+    decimalPointOK = true;
+    numbersInCalc = [], operatorsInCalc = [];
 }
 
 equalBtn.addEventListener('click', equalBtnBehaviour)
 
 function add(num1, num2) {
-    return parseInt(num1) + parseInt(num2);
+    return num1 + num2;
 }
 
 function subtract(num1, num2) {
