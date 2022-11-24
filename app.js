@@ -32,16 +32,21 @@ numbers.forEach((num) => {
     })
 })
 
+function convertDisplay(display) {
+    return Math.abs(display)
+}
+
 operators.forEach((operator) => {
     operator.addEventListener('click', function(operator) {
-        numbersInCalc.push(parseInt(display.innerHTML))
+        numbersInCalc.push(convertDisplay(display.innerHTML))
         // for evaluating without equal button
         if(numbersInCalc.length == 2 && operatorsInCalc.length == 1) {
             equalBtnBehaviour()
-            numbersInCalc.push(parseInt(display.innerHTML))
+            numbersInCalc.push(convertDisplay(display.innerHTML))
             operatorsInCalc.push(operator.target.textContent);
             display.innerHTML = numbersInCalc[0]
             enteringNumbers = false;
+            decimalPointOK = true;
             opOn = true;
         }
         if(!opOn && display.innerHTML.length < 18) {
@@ -92,7 +97,7 @@ clearBtn.addEventListener('click', () => {
 
 // sort out equal button behaviour, it should act differently depending on button pressed, psasing a button doesn't work for now
 function equalBtnBehaviour() {
-    numbersInCalc.push(parseInt(display.innerHTML))
+    numbersInCalc.push(convertDisplay(display.innerHTML))
     switch(operatorsInCalc[0]) {
         case '+':
             display.innerHTML = operate(add, numbersInCalc[0], numbersInCalc[1]);
